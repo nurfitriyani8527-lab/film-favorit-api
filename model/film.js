@@ -16,10 +16,16 @@ const filmSchema = new mongoose.Schema({
   rating: {
     type: Number,
     default: 0,
-    min: 0, // min dan max untuk ratingnya misal 0/10
-    max: 10,
-    timestamps: true // untuk auto createdAt/updateAt
+    min: 0,
+    max: 10
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
+  },
+{
+  timestamps: true
 });
-timestamps: true // untuk auto createdAt/updateAt
 module.exports = mongoose.model('film',filmSchema,'films')
