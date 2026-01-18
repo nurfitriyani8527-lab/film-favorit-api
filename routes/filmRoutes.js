@@ -3,9 +3,9 @@ const router = express.Router()
 const authMiddleware = require('../middleware/auth')
 const filmController = require('../controllers/filmController')
 
-router.get('/', authMiddleware, filmController.getAllfilms)
+router.get('/', filmController.getAllfilms)
 
-router.get('/:id', authMiddleware, filmController.getFilmById)
+router.get('/:id', filmController.getFilmById)
 
 router.post('/', authMiddleware, filmController.postFilms)
 
