@@ -61,10 +61,6 @@ exports.updateFilms = async (req,res) => {
         const filmId = req.params.id;
         const { judul, author, genre, rating } = req.body;
         console.log("user login",req.user)
-        const cekFilm = film.createdBy === req.user._id
-        if(!cekFilm){
-            return respon(res,403,false,"anda tidak boleh update ini karena ini bukan buatan anda!")
-        }
         const filmUpdate = await film.findByIdAndUpdate(
             filmId, 
             { judul, author, genre, rating },
@@ -76,7 +72,10 @@ exports.updateFilms = async (req,res) => {
         if(!filmUpdate) {
             return respon(res, 404, false, "Film tidak ditemukan", null);
         }
-        
+        const cekFilm = filmUpdate.createdBy.toString() === req.user._id.toString()
+        if(!cekFilm){
+            return respon(res,403,false,"anda tidak boleh update ini karena ini bukan buatan anda!")
+        }
         respon(res, 200, true, "Film berhasil diupdate", filmUpdate);
     } catch (error) {
         respon(res, 500, false, error.message, null);
@@ -87,13 +86,13 @@ exports.deleteFilms = async (req,res) => {
     try {
         const _id = req.params.id
         console.log("user login",req.user)
-        const cekFilm = film.createdBy === req.user._id
-        if(!cekFilm){
-            return respon(res,403,false,"anda tidak bisa menghapus milik orang lain!")
-        }
         const films = await film.findByIdAndDelete(_id)
         if(!films){
             return respon(res,404,false,`Film dengan id ${_id} tidak ditemukan`,null)
+        }
+        const cekFilm = films.createdBy.toString() === req.user._id.toString()
+        if(!cekFilm){
+            return respon(res,403,false,"anda tidak bisa menghapus milik orang lain!")
         }
         respon(res,200,true,"Film favorit berhasil dihapus",films)    
     } catch(error) {
