@@ -30,10 +30,10 @@ exports.getFilmById = async (req,res) => {
 }
 
 exports.postFilms = async (req,res) => {
-    const { judul, author, genre, rating } = req.body
+    const { judul, author, genre, rating, deskripsi } = req.body
         console.log("user login",req.user)
         console.log("file upload", req.file)
-        if( !judul || !author || !genre || !rating){
+        if( !judul || !author || !genre || !rating || !deskripsi){
             if(req.file){
                 fs.unlinkSync(req.file.path)
             }
@@ -43,6 +43,7 @@ exports.postFilms = async (req,res) => {
                     author: !author ? "author wajib diisi" : null,
                     genre: !genre ? "genre wajib diisi" : null,
                     rating: !rating ? "rating wajib diisi" : null,
+                    deskripsi: !deskripsi ? "deskripsi wajib diisi" : null,
                     }
             })
         }
@@ -56,6 +57,7 @@ exports.postFilms = async (req,res) => {
                 author, 
                 genre, 
                 rating,
+                deskripsi,
                 image: imagePath,
                 createdBy: req.user._id
             })
