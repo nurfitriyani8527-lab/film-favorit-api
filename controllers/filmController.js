@@ -1,6 +1,8 @@
 const film = require('../model/film')
 const jwt = require('jsonwebtoken')
 const respon = require('../utils/response')
+const path = require('path')
+const fs = require('fs')
 
 exports.getAllfilms = async (req,res) => {
     try {
@@ -30,7 +32,11 @@ exports.getFilmById = async (req,res) => {
 exports.postFilms = async (req,res) => {
     const { judul, author, genre, rating } = req.body
         console.log("user login",req.user)
+        console.log("file upload", req.file)
         if( !judul || !author || !genre || !rating){
+            if(req.file){
+                fs.unlinkSync(req.file.path)
+            }
             return respon(res,400,false,"tidak bisa menambahkan film favorit",{
                 fields: {
                     judul: !judul ? "judul wajib diisi" : null,
@@ -41,17 +47,25 @@ exports.postFilms = async (req,res) => {
             })
         }
         try {
+            let imagePath = null
+            if(req.file){
+                imagePath = req.file.path
+            }
             const dataBaruFilms = new film({
                 judul,
                 author, 
                 genre, 
                 rating,
+                image: imagePath,
                 createdBy: req.user._id
             })
             await dataBaruFilms.save()
     
             respon(res,201,true,"berhasil menambah film ke favorit",dataBaruFilms)
         } catch (error) {
+            if(req.file){
+                fs.unlinkSync(req.file.path)
+            }
             respon(res,500,false,"terjadi kesalahan saat menambahkan film",error.message)
         }
 }

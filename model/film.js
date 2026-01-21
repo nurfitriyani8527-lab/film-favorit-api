@@ -14,10 +14,14 @@ const filmSchema = new mongoose.Schema({
     required: true
   },
   rating: {
-    type: Number,
+    type:Number,
     default: 0,
     min: 0,
     max: 10
+  },
+  image: {
+    type: String,
+    default: null
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
