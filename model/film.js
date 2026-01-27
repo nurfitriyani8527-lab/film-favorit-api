@@ -19,6 +19,10 @@ const filmSchema = new mongoose.Schema({
     min: 0,
     max: 10
   },
+  deskripsi: {
+    type: String,
+    required: true
+  },  
   image: {
     type: String,
     default: null
