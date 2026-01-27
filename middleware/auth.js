@@ -18,6 +18,10 @@ const authMiddleware = async (req,res,next) => {
                 return respon(res,401,false,"token user tidak cocok",error.message)
             }
         req.user = user
+        const cekToken = req.headers['authorization']?.split(' ')[1]
+            if(tokenBlacklist.has(cekToken)) {
+                return respon(res,401,false,"token sudah tidak valid")
+            }
         next()
     } catch (error) {
         return respon(res,401,false,"gagal",error.message)

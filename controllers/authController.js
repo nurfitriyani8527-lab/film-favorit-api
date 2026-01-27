@@ -62,11 +62,13 @@ exports.login = async (req,res) => {
 exports.logout = (async(req,res) => {
     try {
         const _id = req.params.id
-        console.log("user login",req.user)
+        console.log("user logout",req.user)
         const user = await User.findByIdAndDelete(_id)
         if(!user){
             return respon(res,404,false,`akun dengan id ${_id} tidak ditemukan`,user)
         }
+        const token = req.headers['authorization']?.split(' ')[1];
+        tokenBlacklist.add(token);
         respon(res,200,true,`akun dengan id ${_id} berhasil di hapus`,user)
     } catch (error) {
         return respon(res,500,false,"terjadi kesalahan saat logout",error.message)
