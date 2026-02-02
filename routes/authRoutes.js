@@ -7,6 +7,4 @@ router.post('/register',authController.Register)
 
 router.post('/login',authController.login)
 
-router.delete('/logout', authMiddleware, authController.logout)
-
 module.exports = router

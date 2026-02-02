@@ -62,12 +62,8 @@ exports.postFilms = async (req,res) => {
                 createdBy: req.user._id
             })
             await dataBaruFilms.save()
-    
             respon(res,201,true,"berhasil menambah film ke favorit",dataBaruFilms)
         } catch (error) {
-            if(req.file){
-                fs.unlinkSync(req.file.path)
-            }
             respon(res,500,false,"terjadi kesalahan saat menambahkan film",error.message)
         }
 }
